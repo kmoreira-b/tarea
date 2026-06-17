@@ -1,0 +1,186 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_source": "insomnia.desktop.app:v2023",
+  "__export_date": "2026-06-15T00:00:00.000Z",
+  "resources": [
+    {
+      "_id": "wrk_tarea_crud",
+      "_type": "workspace",
+      "name": "Tarea CRUD Producto y Categoria",
+      "description": "Coleccion de pruebas para el CRUD de Producto y Categoria con JWT",
+      "scope": "collection"
+    },
+    {
+      "_id": "env_base",
+      "_type": "environment",
+      "parentId": "wrk_tarea_crud",
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://localhost:8080",
+        "token": ""
+      }
+    },
+    {
+      "_id": "fld_auth",
+      "_type": "request_group",
+      "parentId": "wrk_tarea_crud",
+      "name": "Autenticacion",
+      "metaSortKey": -300
+    },
+    {
+      "_id": "req_login_admin",
+      "_type": "request",
+      "parentId": "fld_auth",
+      "name": "Login (SUPER-ADMIN-ROLE)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/api/auth/login",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}"
+      },
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "metaSortKey": -300
+    },
+    {
+      "_id": "req_login_user",
+      "_type": "request",
+      "parentId": "fld_auth",
+      "name": "Login (USER)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/api/auth/login",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"username\": \"user\",\n  \"password\": \"user123\"\n}"
+      },
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "metaSortKey": -290
+    },
+    {
+      "_id": "fld_categoria",
+      "_type": "request_group",
+      "parentId": "wrk_tarea_crud",
+      "name": "Categorias",
+      "metaSortKey": -200
+    },
+    {
+      "_id": "req_cat_list",
+      "_type": "request",
+      "parentId": "fld_categoria",
+      "name": "Listar Categorias",
+      "method": "GET",
+      "url": "{{ _.base_url }}/api/categoria/",
+      "authentication": { "type": "bearer", "token": "{{ _.token }}" },
+      "metaSortKey": -200
+    },
+    {
+      "_id": "req_cat_create",
+      "_type": "request",
+      "parentId": "fld_categoria",
+      "name": "Registrar Categoria",
+      "method": "POST",
+      "url": "{{ _.base_url }}/api/categoria/",
+      "authentication": { "type": "bearer", "token": "{{ _.token }}" },
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nombre\": \"Bebidas\",\n  \"descripcion\": \"Productos liquidos\"\n}"
+      },
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "metaSortKey": -190
+    },
+    {
+      "_id": "req_cat_update",
+      "_type": "request",
+      "parentId": "fld_categoria",
+      "name": "Actualizar Categoria",
+      "method": "PUT",
+      "url": "{{ _.base_url }}/api/categoria/1",
+      "authentication": { "type": "bearer", "token": "{{ _.token }}" },
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nombre\": \"Bebidas frias\",\n  \"descripcion\": \"Productos liquidos refrigerados\"\n}"
+      },
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "metaSortKey": -180
+    },
+    {
+      "_id": "req_cat_delete",
+      "_type": "request",
+      "parentId": "fld_categoria",
+      "name": "Borrar Categoria",
+      "method": "DELETE",
+      "url": "{{ _.base_url }}/api/categoria/1",
+      "authentication": { "type": "bearer", "token": "{{ _.token }}" },
+      "metaSortKey": -170
+    },
+    {
+      "_id": "fld_producto",
+      "_type": "request_group",
+      "parentId": "wrk_tarea_crud",
+      "name": "Productos",
+      "metaSortKey": -100
+    },
+    {
+      "_id": "req_prod_list",
+      "_type": "request",
+      "parentId": "fld_producto",
+      "name": "Listar Productos",
+      "method": "GET",
+      "url": "{{ _.base_url }}/api/producto/",
+      "authentication": { "type": "bearer", "token": "{{ _.token }}" },
+      "metaSortKey": -100
+    },
+    {
+      "_id": "req_prod_create",
+      "_type": "request",
+      "parentId": "fld_producto",
+      "name": "Registrar Producto",
+      "method": "POST",
+      "url": "{{ _.base_url }}/api/producto/",
+      "authentication": { "type": "bearer", "token": "{{ _.token }}" },
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nombre\": \"Cafe\",\n  \"descripcion\": \"Cafe molido 500g\",\n  \"precio\": 3500.00,\n  \"cantidadEnStock\": 20,\n  \"categoriaId\": 1\n}"
+      },
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "metaSortKey": -90
+    },
+    {
+      "_id": "req_prod_update",
+      "_type": "request",
+      "parentId": "fld_producto",
+      "name": "Actualizar Producto",
+      "method": "PUT",
+      "url": "{{ _.base_url }}/api/producto/1",
+      "authentication": { "type": "bearer", "token": "{{ _.token }}" },
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nombre\": \"Cafe premium\",\n  \"descripcion\": \"Cafe molido 1kg\",\n  \"precio\": 6000.00,\n  \"cantidadEnStock\": 15,\n  \"categoriaId\": 1\n}"
+      },
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "metaSortKey": -80
+    },
+    {
+      "_id": "req_prod_delete",
+      "_type": "request",
+      "parentId": "fld_producto",
+      "name": "Borrar Producto",
+      "method": "DELETE",
+      "url": "{{ _.base_url }}/api/producto/1",
+      "authentication": { "type": "bearer", "token": "{{ _.token }}" },
+      "metaSortKey": -70
+    }
+  ]
+}
