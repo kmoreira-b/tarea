@@ -4,10 +4,10 @@ import org.example.tarea.security.JwtAuthFilter;
 import org.example.tarea.security.Md5PasswordEncoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,7 +19,16 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
+/**
+ * Configuracion de seguridad.
+ *
+ * Aqui viven las reglas gruesas y de transporte (CORS, CSRF, sesion sin
+ * estado, que es publico y que exige sesion). El rol concreto que pide cada
+ * endpoint NO se declara aqui: va con @PreAuthorize en el propio controlador.
+ */
+
 @Configuration
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
@@ -49,14 +58,11 @@ public class SecurityConfig {
                         })
                 )
                 .authorizeHttpRequests(auth -> auth
-                        // Login es público
+                        // Login y registro son publicos.
                         .requestMatchers("/api/auth/**").permitAll()
-                        // Consultar productos y categorias: cualquier usuario autenticado
-                        .requestMatchers(HttpMethod.GET, "/api/producto/**", "/api/categoria/**").authenticated()
-                        // Registrar, actualizar y borrar: solo SUPER-ADMIN-ROLE
-                        .requestMatchers(HttpMethod.POST, "/api/producto/**", "/api/categoria/**").hasAuthority("ROLE_SUPER-ADMIN-ROLE")
-                        .requestMatchers(HttpMethod.PUT, "/api/producto/**", "/api/categoria/**").hasAuthority("ROLE_SUPER-ADMIN-ROLE")
-                        .requestMatchers(HttpMethod.DELETE, "/api/producto/**", "/api/categoria/**").hasAuthority("ROLE_SUPER-ADMIN-ROLE")
+                        // Todo lo demas exige sesion iniciada. Que rol hace
+                        // falta para cada operacion lo dice el @PreAuthorize
+                        // del controlador correspondiente.
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
